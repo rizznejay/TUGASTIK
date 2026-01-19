@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUGAS TIK #RRQ7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #6366f1; --secondary: #a855f7; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; }
+        .dark { --bg: #020617; --card: #1e293b; --text: #f8fafc; }
+        * { box-sizing: border-box; transition: 0.3s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 30px 20px; text-align: center; border-radius: 0 0 35px 35px; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .tab-content { display: none; animation: slideUp 0.4s ease; }
+        .tab-content.active { display: block; }
+        .card { background: var(--card); padding: 20px; border-radius: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.05); }
+        label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--primary); margin: 10px 0 2px 5px; }
+        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 5px; border-radius: 14px; border: 1px solid #e2e8f0; background: var(--bg); color: var(--text); font-family: inherit; }
+        .btn-calc { width: 100%; padding: 16px; background: linear-gradient(to right, var(--primary), var(--secondary)); color: white; border: none; border-radius: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        .result-box { margin-top: 15px; padding: 20px; background: rgba(99, 102, 241, 0.05); border-radius: 18px; text-align: center; border: 2px dashed var(--primary); }
+        .res-val { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+        .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; background: var(--card); display: flex; justify-content: space-around; padding: 12px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 1000; border: 1px solid rgba(0,0,0,0.05); }
+        .nav-item { cursor: pointer; text-align: center; color: #94a3b8; font-size: 0.65rem; }
+        .nav-item.active { color: var(--primary); font-weight: bold; transform: translateY(-5px); }
+        .nav-item i { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2 style="margin:0">TUGAS TIK #RRQ7🐦‍🔥🏂 </h2>
+    <p style="font-size:0.8rem; opacity:0.9">Official Rizznejay</p>
+    <button onclick="document.body.classList.toggle('dark')" style="background:rgba(255,255,255,0.2); border:none; color:white; padding:6px 15px; border-radius:20px; margin-top:10px; font-size: 0.7rem; cursor:pointer;">🌓 Mode</button>
+</div>
+
+<div class="container">
+    <div id="math" class="tab-content active">
+        <div class="card">
+            <h3>📐 Luas & Volume</h3>
+            <select id="m_type" onchange="updateMathInput()">
+                <option value="p">Persegi</option><option value="l">Lingkaran</option>
+                <option value="kubus">Volume Kubus</option><option value="balok">Volume Balok</option>
+            </select>
+            <input type="number" id="mv1" placeholder="Angka 1">
+            <input type="number" id="mv2" style="display:none" placeholder="Angka 2">
+            <input type="number" id="mv3" style="display:none" placeholder="Angka 3">
+            <button class="btn-calc" onclick="hitungMath()">Hitung</button>
+            <div class="result-box"><div class="res-val" id="res_m">0</div></div>
+        </div>
+        <div class="card">
+            <h3>📐 Phytagoras</h3>
+            <div style="display:flex; gap:10px"><input type="number" id="phy_a" placeholder="Alas"><input type="number" id="phy_b" placeholder="Tinggi"></div>
+            <button class="btn-calc" onclick="hitungPhy()">Cari Sisi Miring (c)</button>
+            <div class="result-box"><div class="res-val" id="res_phy">0</div></div>
+        </div>
+    </div>
+
+    <div id="stats" class="tab-content">
+        <div class="card">
+            <h3>🌡️ Konversi Suhu</h3>
+            <label>Dari Celsius ke:</label>
+            <select id="temp_type">
+                <option value="f">Fahrenheit (°F)</option>
+                <option value="r">Reamur (°R)</option>
+                <option value="k">Kelvin (K)</option>
+            </select>
+            <input type="number" id="temp_in" placeholder="Masukkan derajat Celsius">
+            <button class="btn-calc" onclick="hitungSuhu()">Konversi Suhu</button>
+            <div class="result-box"><div class="res-val" id="res_temp">0</div></div>
+        </div>
+        <div class="card">
+            <h3>📊 Mean (Rata-rata Data)</h3>
+            <input type="text" id="stat_in" placeholder="Contoh: 70,80,90">
+            <button class="btn-calc" onclick="hitungStat()">Analisis Data</button>
+            <div class="result-box" id="res_stat">Hasil di sini...</div>
+        </div>
+    </div>
+
+    <div id="raport" class="tab-content">
+        <div class="card">
+            <h3>📝 Rata-Rata Raport MTs</h3>
+            <div id="mapel">
+                <label>Al-Qur'an Hadits</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>Akidah Akhlak</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>Fiqih</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>SKI</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>Bahasa Arab</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>Matematika</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>IPA</label><input type="number" class="n-rap" placeholder="Nilai">
+                <label>Bahasa Indonesia</label><input type="number" class="n-rap" placeholder="Nilai">
+            </div>
+            <button class="btn-calc" onclick="hitungRaport()">Hitung Rata-Rata</button>
+            <div class="result-box"><div class="res-val" id="res_rap">0</div></div>
+        </div>
+    </div>
+
+    <div id="info" class="tab-content">
+        <div class="card">
+            <h3>📝 Catatan Belajar</h3>
+            <textarea id="myNote" rows="8" placeholder="Simpan rumus atau PR di sini..."></textarea>
+            <button class="btn-calc" onclick="saveNote()">Simpan di HP</button>
+        </div>
+    </div>
+
+    <div id="quiz" class="tab-content">
+        <div class="card" style="text-align:center">
+            <h3>🧠 Extreme Quiz</h3>
+            <div id="quiz_header" style="display:flex; justify-content:space-between; margin-bottom:15px; font-weight:bold; font-size:0.8rem">
+                <span>Skor: <span id="score">0</span></span>
+                <span>Soal: <span id="q_num">0</span>/10</span>
+            </div>
+            <p id="q_text" style="font-weight:bold; min-height:50px">Siap dapet nilai 100?</p>
+            <div id="q_box" style="display:none">
+                <button class="btn-calc" style="background:#444; margin-bottom:10px" onclick="checkQ(0)" id="opt0"></button>
+                <button class="btn-calc" style="background:#444; margin-bottom:10px" onclick="checkQ(1)" id="opt1"></button>
+                <button class="btn-calc" style="background:#444" onclick="checkQ(2)" id="opt2"></button>
+            </div>
+            <button class="btn-calc" id="btn_q" onclick="startQ()">Mulai Kuis</button>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="tab('math', this)"><i>📐</i>Math</div>
+    <div class="nav-item" onclick="tab('stats', this)"><i>🌡️</i>Sains</div>
+    <div class="nav-item" onclick="tab('raport', this)"><i>📝</i>Raport</div>
+    <div class="nav-item" onclick="tab('info', this)"><i>📝</i>Notes</div>
+    <div class="nav-item" onclick="tab('quiz', this)"><i>🧠</i>Quiz</div>
+</div>
+
+<script>
+    function tab(id, el) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    function updateMathInput() {
+        const t = document.getElementById('m_type').value;
+        document.getElementById('mv2').style.display = (t==='balok') ? 'block' : 'none';
+        document.getElementById('mv3').style.display = (t==='balok') ? 'block' : 'none';
+    }
+
+    function hitungMath() {
+        const t = document.getElementById('m_type').value;
+        const v1 = parseFloat(document.getElementById('mv1').value || 0);
+        const v2 = parseFloat(document.getElementById('mv2').value || 0);
+        const v3 = parseFloat(document.getElementById('mv3').value || 0);
+        let res = (t==='p')?v1*v1:(t==='l')?3.14*v1*v1:(t==='kubus')?v1**3:v1*v2*v3;
+        document.getElementById('res_m').innerText = res.toLocaleString();
+    }
+
+    function hitungPhy() {
+        const a = parseFloat(document.getElementById('phy_a').value || 0);
+        const b = parseFloat(document.getElementById('phy_b').value || 0);
+        document.getElementById('res_phy').innerText = Math.sqrt(a*a + b*b).toFixed(2);
+    }
+
+    function hitungSuhu() {
+        const c = parseFloat(document.getElementById('temp_in').value || 0);
+        const t = document.getElementById('temp_type').value;
+        let res = (t==='f') ? (c * 9/5) + 32 : (t==='r') ? c * 4/5 : c + 273.15;
+        document.getElementById('res_temp').innerText = res.toFixed(2);
+    }
+
+    function hitungStat() {
+        const input = document.getElementById('stat_in').value;
+        const data = input.split(',').map(Number).filter(n => !isNaN(n));
+        if(data.length === 0) return;
+        const mean = data.reduce((a,b)=>a+b)/data.length;
+        document.getElementById('res_stat').innerHTML = `<b>Mean:</b> ${mean.toFixed(2)}`;
+    }
+
+    function hitungRaport() {
+        const n = document.querySelectorAll('.n-rap');
+        let total = 0, count = 0;
+        n.forEach(i => { if(i.value){ total += parseFloat(i.value); count++; } });
+        const rata = count > 0 ? total/count : 0;
+        document.getElementById('res_rap').innerText = rata.toFixed(2);
+    }
+
+    function saveNote() { localStorage.setItem('mts_note_final', document.getElementById('myNote').value); alert("Catatan tersimpan!"); }
+    window.onload = () => { document.getElementById('myNote').value = localStorage.getItem('mts_note_final') || ""; };
+
+    const questions = [
+        {s:"Rumus Luas Lingkaran?", a:["π x r x r","p x l","2 x π x r"], c:0},
+        {s:"Ibu kota Indonesia saat ini?", a:["Bandung","Jakarta","IKN"], c:2},
+        {s:"Akar dari 144?", a:["10","12","14"], c:1},
+        {s:"Planet terbesar di tata surya?", a:["Mars","Bumi","Jupiter"], c:2},
+        {s:"7 x 8 = ...", a:["54","56","58"], c:1},
+        {s:"Zat hijau daun disebut?", a:["Klorofil","Stomata","Oksigen"], c:0},
+        {s:"Benua terkecil di dunia?", a:["Asia","Eropa","Australia"], c:2},
+        {s:"Sudut lurus besarnya...", a:["90°","180°","360°"], c:1},
+        {s:"Simbol kimia Air?", a:["CO2","H2O","O2"], c:1},
+        {s:"Penemu lampu pijar?", a:["Tesla","Newton","Edison"], c:2}
+    ];
+    let curIdx = 0, score = 0;
+
+    function startQ() {
+        curIdx = 0; score = 0;
+        document.getElementById('score').innerText = "0";
+        document.getElementById('q_box').style.display='block';
+        document.getElementById('btn_q').style.display='none';
+        showQ();
+    }
+
+    function showQ() {
+        if(curIdx < questions.length) {
+            const q = questions[curIdx];
+            document.getElementById('q_num').innerText = curIdx + 1;
+            document.getElementById('q_text').innerText = q.s;
+            document.getElementById('opt0').innerText = q.a[0];
+            document.getElementById('opt1').innerText = q.a[1];
+            document.getElementById('opt2').innerText = q.a[2];
+        } else {
+            document.getElementById('q_text').innerText = "Selesai! Skor Akhir: " + score * 10;
+            document.getElementById('q_box').style.display='none';
+            document.getElementById('btn_q').style.display='block';
+            document.getElementById('btn_q').innerText = "Main Lagi";
+        }
+    }
+
+    function checkQ(i) {
+        if(i === questions[curIdx].c) { score++; document.getElementById('score').innerText = score * 10; }
+        curIdx++;
+        showQ();
+    }
+</script>
+</body>
+</html>
